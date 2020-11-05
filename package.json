@@ -1,0 +1,23 @@
+{
+  "name": "gare",
+  "version": "0.0.1",
+  "description": "Some node http router made for fun...",
+  "main": "gare.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/str1z/gare.git"
+  },
+  "keywords": [
+    "router",
+    "http"
+  ],
+  "author": "str1z",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/str1z/gare/issues"
+  },
+  "homepage": "https://github.com/str1z/gare#readme"
+}
