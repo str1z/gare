@@ -1,10 +1,19 @@
 "use strict";
 const { IncomingMessage, ServerResponse } = require("http");
+const mimetypes = require("./util/mimetypes");
+const path = require("path");
 
 module.exports = {
-  Router: require("./router"),
-  jsonc: require("./jsonc"),
-  static: require("./static"),
+  // core
+  Router: require("./core/router"),
+  Logger: require("./core/logger"),
+  jsonc: require("./core/jsonc"),
+  mimetypes,
+  // extra
+  static: require("./extra/static"),
+  notFound: require("./extra/not-found"),
+  traffic: require("./extra/traffic"),
+  // util
 };
 
 IncomingMessage.prototype.body = {};
@@ -60,6 +69,7 @@ ServerResponse.prototype.bin = function (data) {
   this.setHeader("Content-Type", "application/octet-stream");
   this.end(data);
 };
-ServerResponse.prototype.file = function (path) {
-  nodefs.createReadStream(path).pipe(this);
+ServerResponse.prototype.file = function (filepath) {
+  this.setHeader("Content-Type", mimetypes[path.extname(filepath)] || "application/octet-stream");
+  nodefs.createReadStream(filepath).pipe(this);
 };
