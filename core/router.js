@@ -1,10 +1,10 @@
 "use strict";
 const http = require("http");
 
-const Deferrer = require("../util/deferrer");
+const defer = require("../util/defer");
 
 function Router() {
-  this.defer = new Deferrer(this);
+  this.defer = defer(this);
   this._method = {};
   this._route = {};
   this._chain = {};
@@ -24,6 +24,7 @@ function Router() {
   };
 }
 Router.prototype.pack = function () {
+  this.defer();
   for (let method of http.METHODS) {
     this._packed_route[method] = {};
     for (let url in this._route[method]) {
