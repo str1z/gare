@@ -9,7 +9,7 @@ function Router() {
   this._route = {};
   this._chain = {};
   this._packed_route = {};
-  this._packed_pipe = {};
+  this._packed_chain = {};
   for (let method of http.METHODS) {
     this._method[method] = [];
     this._route[method] = {};
@@ -24,7 +24,6 @@ function Router() {
   };
 }
 Router.prototype.pack = function () {
-  this.defer();
   for (let method of http.METHODS) {
     this._packed_route[method] = {};
     for (let url in this._route[method]) {
@@ -33,7 +32,7 @@ Router.prototype.pack = function () {
       handlers.push(...this._method[method], ...this._route[method][url]);
     }
     let handlers = [];
-    this._packed_pipe[method] = handlers;
+    this._packed_chain[method] = handlers;
     handlers.push(...this._method[method], ...this._chain[method]);
   }
   this.handle = (req, res) => {
@@ -41,7 +40,7 @@ Router.prototype.pack = function () {
     let method = req.method;
     let route = this._route[method][url];
     if (route) this.run(this._packed_route[method][url], req, res);
-    else this.run([...this._packed_pipe[method], ...this._chain[method]], req, res);
+    else this.run([...this._packed_chain[method], ...this._chain[method]], req, res);
   };
   return this;
 };
@@ -53,7 +52,12 @@ Router.prototype.run = function (handlers, req, res) {
   handlers[0](req, res);
 };
 Router.prototype.createServer = function () {
+  this.defer();
   return http.createServer(this.handle);
+};
+Router.prototype.serve = function (port, callback) {
+  let server = this.createServer();
+  return server.listen(port).on("listening", () => callback(server));
 };
 Router.prototype.add = function (middleware) {
   return middleware(this);

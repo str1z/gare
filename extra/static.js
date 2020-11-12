@@ -22,7 +22,10 @@ let mapDirectory = (router, dirname, rootDirname) => {
 module.exports = (dirname, prefix = "", cache = false) => (router) => {
   if (cache) return mapDirectory(router, dirname, dirname);
   router.get(prefix + "*", (req, res) => {
-    fs.createReadStream(path.join(path.resolve(dirname), path.normalize(req.url).replace(/^(\.\.[\/\\])+/, "")))
+    let filepath = path.join(path.resolve(dirname), path.normalize(req.url).replace(/^(\.\.[\/\\])+/, ""));
+    let type = mimetypes[path.extname(filepath)] || "application/octet-stream";
+    res.setHeader("Content-Type", type);
+    fs.createReadStream(filepath)
       .on("error", () => req.next())
       .pipe(res);
   });
