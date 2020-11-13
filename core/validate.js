@@ -172,7 +172,6 @@ class Validate {
     });
     return this;
   }
-
   static object(object) {
     return new this().type("object").keep(Object.keys(object)).keys(object);
   }

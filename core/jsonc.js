@@ -1,7 +1,5 @@
 "use strict";
 
-const { string } = require("./validate");
-
 const jsonc = (schema) => {
   return new Function("data", "return `" + generateCode(schema) + "`");
 };
@@ -50,13 +48,11 @@ function schemaFromSample(sample) {
 
 function auto() {
   let serializer = false;
-  function c(data) {
+  let c = (data) => {
     if (serializer) return serializer(data);
-    else {
-      serializer = jsonc(schemaFromSample(data));
-      return JSON.stringify(data);
-    }
-  }
+    else serializer = jsonc(schemaFromSample(data));
+    return JSON.stringify(data);
+  };
   c.reset = () => (serializer = false);
   return c;
 }
@@ -64,10 +60,5 @@ function auto() {
 jsonc.generateCode = generateCode;
 jsonc.schemaFromSample = schemaFromSample;
 jsonc.auto = auto;
-
-let testC = jsonc.auto();
-
-console.log(testC("what"));
-console.log(testC(12));
 
 module.exports = jsonc;

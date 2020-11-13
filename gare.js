@@ -6,9 +6,9 @@ const path = require("path");
 module.exports = {
   // core
   Router: require("./core/router"),
+  Validate: require("./core/validate"),
   Logger: require("./core/logger"),
   jsonc: require("./core/jsonc"),
-  validate: require("./core/validate"),
   security: require("./core/security"),
   // extra
   static: require("./extra/static"),
