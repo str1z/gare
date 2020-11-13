@@ -12,7 +12,7 @@ module.exports = {
   security: require("./core/security"),
   // extra
   static: require("./extra/static"),
-  on404: require("./extra/on404"),
+  basic404: require("./extra/basic404"),
   traffic: require("./extra/traffic"),
   // util
   mimetypes,

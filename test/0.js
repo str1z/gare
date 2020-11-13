@@ -4,7 +4,11 @@ const path = require("path");
 const app = new gare.Router();
 const logger = new gare.Logger();
 
-app.defer.add(gare.notFound());
+app.defer.add(
+  gare.basic404((req, res) => {
+    res.text("hello");
+  })
+);
 app.defer.pack();
 
 app.add(gare.traffic({ wait: 1000 }));
