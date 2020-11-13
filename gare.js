@@ -8,12 +8,14 @@ module.exports = {
   Router: require("./core/router"),
   Logger: require("./core/logger"),
   jsonc: require("./core/jsonc"),
-  mimetypes,
+  validate: require("./core/validate"),
+  security: require("./core/security"),
   // extra
   static: require("./extra/static"),
   notFound: require("./extra/not-found"),
   traffic: require("./extra/traffic"),
   // util
+  mimetypes,
 };
 
 IncomingMessage.prototype.body = {};
