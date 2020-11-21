@@ -16,9 +16,9 @@ function Router() {
     this._chain[method] = [];
   }
   this.handle = (req, res) => {
-    let url = (req.URL = req.URL || req.url);
+    if (!req.URL) req.URL = req.url;
     let method = req.method;
-    let route = this._route[method][url];
+    let route = this._route[method][req.url];
     if (route) this.run([...this._method[method], ...route], req, res);
     else this.run([...this._method[method], ...this._chain[method]], req, res);
   };
@@ -36,11 +36,11 @@ Router.prototype.pack = function () {
     handlers.push(...this._method[method], ...this._chain[method]);
   }
   this.handle = (req, res) => {
-    let url = (req.URL = req.URL || req.url);
+    if (!req.URL) req.URL = req.url;
     let method = req.method;
-    let route = this._route[method][url];
-    if (route) this.run(this._packed_route[method][url], req, res);
-    else this.run([...this._packed_chain[method], ...this._chain[method]], req, res);
+    let route = this._packed_route[method][req.url];
+    if (route) this.run(route, req, res);
+    else this.run(this._packed_chain[method], req, res);
   };
   return this;
 };

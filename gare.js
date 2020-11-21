@@ -4,6 +4,9 @@ const mimetypes = require("./util/mimetypes");
 const path = require("path");
 
 module.exports = {
+  // extern
+  validate: require("jskema"),
+  Template: require("wagon-engine"),
   // core
   Router: require("./core/router"),
   Validate: require("./core/validate"),
@@ -74,4 +77,8 @@ ServerResponse.prototype.bin = function (data) {
 ServerResponse.prototype.file = function (filepath) {
   this.setHeader("Content-Type", mimetypes[path.extname(filepath)] || "application/octet-stream");
   nodefs.createReadStream(filepath).pipe(this);
+};
+ServerResponse.prototype.render = function (renderer, data) {
+  this.setHeader("Content-Type", "text/html");
+  this.end(renderer(data));
 };
